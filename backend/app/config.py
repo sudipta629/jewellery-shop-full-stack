@@ -78,11 +78,9 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG: bool = False
-    SQLALCHEMY_DATABASE_URI: str = os.environ.get("DATABASE_URL", "")
-
-    # Render PostgreSQL uses postgres:// URI — SQLAlchemy+psycopg2 needs postgresql+psycopg2://
-    @classmethod
-    def _fix_db_uri(cls) -> str:
+    
+    @staticmethod
+    def _fix_db_uri() -> str:
         uri = os.environ.get("DATABASE_URL", "")
         if uri.startswith("postgres://"):
             uri = uri.replace("postgres://", "postgresql+psycopg2://", 1)
@@ -90,8 +88,7 @@ class ProductionConfig(BaseConfig):
             uri = uri.replace("postgresql://", "postgresql+psycopg2://", 1)
         return uri
 
-    def __init__(self):
-        self.SQLALCHEMY_DATABASE_URI = self._fix_db_uri()
+    SQLALCHEMY_DATABASE_URI: str = _fix_db_uri()
 
 
 class TestingConfig(BaseConfig):
