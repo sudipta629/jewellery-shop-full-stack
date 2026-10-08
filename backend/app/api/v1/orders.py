@@ -155,9 +155,9 @@ def place_order():
             coupon = Coupon.query.filter_by(code=coupon_code, is_active=True).first()
             if not coupon:
                 return error_response("INVALID_COUPON", "Coupon code is invalid or inactive.", 422)
-            if coupon.valid_until and now > coupon.valid_until:
+            if coupon.valid_until and now > coupon.valid_until.replace(tzinfo=None):
                 return error_response("COUPON_EXPIRED", "This coupon has expired.", 422)
-            if coupon.valid_from and now < coupon.valid_from:
+            if coupon.valid_from and now < coupon.valid_from.replace(tzinfo=None):
                 return error_response("COUPON_NOT_YET_ACTIVE", "This coupon is not yet active.", 422)
             if coupon.usage_limit and coupon.usage_count >= coupon.usage_limit:
                 return error_response("COUPON_EXHAUSTED", "This coupon has reached its usage limit.", 422)

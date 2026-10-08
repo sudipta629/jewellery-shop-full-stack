@@ -45,7 +45,7 @@ def validate_coupon():
     coupon = Coupon.query.filter_by(code=code, is_active=True).first()
     if not coupon:
         return error_response("INVALID_COUPON", "Invalid or inactive coupon.", 422)
-    if coupon.valid_until and now > coupon.valid_until:
+    if coupon.valid_until and now > coupon.valid_until.replace(tzinfo=None):
         return error_response("COUPON_EXPIRED", "This coupon has expired.", 422)
     if coupon.usage_limit and coupon.usage_count >= coupon.usage_limit:
         return error_response("COUPON_EXHAUSTED", "Coupon usage limit reached.", 422)

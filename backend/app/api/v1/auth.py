@@ -73,7 +73,7 @@ def request_otp():
         .first()
     )
     if recent:
-        cooldown_until = recent.created_at + timedelta(seconds=OTP_RESEND_COOLDOWN_SECONDS)
+        cooldown_until = recent.created_at.replace(tzinfo=None) + timedelta(seconds=OTP_RESEND_COOLDOWN_SECONDS)
         if now < cooldown_until:
             seconds_left = int((cooldown_until - now).total_seconds())
             return error_response(
@@ -146,7 +146,7 @@ def verify_otp():
     if not otp_record:
         return error_response("INVALID_OTP", "No active OTP found. Please request a new one.", 401)
 
-    if now > otp_record.expires_at:
+    if now > otp_record.expires_at.replace(tzinfo=None):
         otp_record.is_used = True
         db.session.commit()
         return error_response("OTP_EXPIRED", "OTP has expired. Please request a new one.", 401)
