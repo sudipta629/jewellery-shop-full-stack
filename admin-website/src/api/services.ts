@@ -83,7 +83,7 @@ export const couponsApi = {
 // ─── Offers ──────────────────────────────────────────────────────────────
 
 export const offersApi = {
-  list: () => adminApiClient.get('/offers').then(extractData),
+  list: () => adminApiClient.get('/offers/admin/all').then(extractData),
   create: (data: any) => adminApiClient.post('/offers', data).then(extractData),
   update: (id: number, data: any) => adminApiClient.put(`/offers/${id}`, data).then(extractData),
   delete: (id: number) => adminApiClient.delete(`/offers/${id}`).then(extractData),

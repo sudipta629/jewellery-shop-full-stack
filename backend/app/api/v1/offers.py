@@ -38,6 +38,14 @@ def list_offers():
     return success_response([_offer_dict(o) for o in offers])
 
 
+@offers_bp.get("/admin/all")
+@admin_required(allowed_roles=[AdminRole.SUPER_ADMIN, AdminRole.ADMIN])
+def list_all_offers():
+    """Admin: list all offers including inactive."""
+    offers = Offer.query.order_by(Offer.created_at.desc()).all()
+    return success_response([_offer_dict(o) for o in offers])
+
+
 @offers_bp.post("")
 @admin_required(allowed_roles=[AdminRole.SUPER_ADMIN, AdminRole.ADMIN])
 def create_offer():
