@@ -134,7 +134,7 @@ export default function OffersPage() {
           <h1 className="text-2xl font-display text-cream">Offers</h1>
           <p className="text-cream/40 text-sm font-sans mt-0.5">Manage promotions and discounts</p>
         </div>
-        <button onClick={() => { setEditingId(null); setFormData(defaultForm); setIsModalOpen(true); }} className="btn-primary flex items-center gap-2">
+        <button onClick={() => { setEditingId(null); setFormData(defaultForm); setIsModalOpen(true); }} className="admin-btn flex items-center gap-2">
           <Plus size={16} /> Add Offer
         </button>
       </div>
@@ -286,8 +286,8 @@ export default function OffersPage() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t border-gold-500/10">
-                <button type="button" onClick={closeModal} className="btn-ghost">Cancel</button>
-                <button type="submit" disabled={addMutation.isPending || updateMutation.isPending} className="btn-primary">
+                <button type="button" onClick={closeModal} className="admin-btn-ghost">Cancel</button>
+                <button type="submit" disabled={addMutation.isPending || updateMutation.isPending} className="admin-btn">
                   {addMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Offer'}
                 </button>
               </div>
