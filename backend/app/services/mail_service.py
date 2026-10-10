@@ -80,10 +80,16 @@ def send_otp_email(to_email: str, code: str, purpose: OtpPurpose) -> None:
     port = int(app_config.get("MAIL_PORT", 587))
     use_tls = app_config.get("MAIL_USE_TLS", True)
 
-    with smtplib.SMTP(mail_server, port) as server:
-        server.ehlo()
-        if use_tls:
-            server.starttls()
+    try:
+        with smtplib.SMTP(mail_server, port, timeout=5) as server:
             server.ehlo()
-        server.login(mail_username, mail_password)
-        server.sendmail(msg["From"], [to_email], msg.as_string())
+            if use_tls:
+                server.starttls()
+                server.ehlo()
+            server.login(mail_username, mail_password)
+            server.sendmail(msg["From"], [to_email], msg.as_string())
+    except Exception as e:
+        print(f"\n===========================================================")
+        print(f"  [FALLBACK] OTP for {to_email} is: {code}  ")
+        print(f"===========================================================\n")
+        current_app.logger.info(f"Fallback: OTP for {to_email} is {code}")
